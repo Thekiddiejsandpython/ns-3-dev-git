@@ -41,6 +41,7 @@ cmd = ns.core.CommandLine()
 cmd.nCsma = 3
 cmd.verbose = "True"
 cmd.nWifi = 3
+cmd.tracing = True
 cmd.AddValue("nCsma", "Number of \"extra\" CSMA nodes/devices")
 cmd.AddValue("nWifi", "Number of wifi STA devices")
 cmd.AddValue("verbose", "Tell echo applications to log if true")
@@ -51,6 +52,12 @@ cmd.Parse(sys.argv)
 nCsma = int(cmd.nCsma)
 verbose = cmd.verbose
 nWifi = int(cmd.nWifi)
+tracing = cmd.tracing
+
+""" The underlying restriction of 18 is due to the grid position
+allocator's configuration; the grid layout will exceed the
+bounding box if more than 18 nodes are provided. """
+
 
 if nWifi > 18:
 	print ("nWifi should be 18 or less; otherwise grid layout exceeds the bounding box")
