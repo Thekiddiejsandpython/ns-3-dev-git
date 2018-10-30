@@ -44,6 +44,7 @@ cmd.nWifi = 3
 cmd.AddValue("nCsma", "Number of \"extra\" CSMA nodes/devices")
 cmd.AddValue("nWifi", "Number of wifi STA devices")
 cmd.AddValue("verbose", "Tell echo applications to log if true")
+cmd.AddValue("tracing", "Enable pcap tracing")
 
 cmd.Parse(sys.argv)
 
@@ -52,7 +53,7 @@ verbose = cmd.verbose
 nWifi = int(cmd.nWifi)
 
 if nWifi > 18:
-	print ("Number of wifi nodes "+ str(nWifi)+ " specified exceeds the mobility bounding box")
+	print ("nWifi should be 18 or less; otherwise grid layout exceeds the bounding box")
 	sys.exit(1)
 
 if verbose == "True":
@@ -144,9 +145,10 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
 ns.core.Simulator.Stop(ns.core.Seconds(10.0))
 
-pointToPoint.EnablePcapAll ("third")
-phy.EnablePcap ("third", apDevices.Get (0))
-csma.EnablePcap ("third", csmaDevices.Get (0), True)
+if tracing == True:
+	pointToPoint.EnablePcapAll ("third")
+	phy.EnablePcap ("third", apDevices.Get (0))
+	csma.EnablePcap ("third", csmaDevices.Get (0), True)
 
 ns.core.Simulator.Run()
 ns.core.Simulator.Destroy()
